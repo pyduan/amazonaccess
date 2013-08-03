@@ -1,6 +1,5 @@
 *.py[cod]
 *.pkl
-*.png
 *.log
 .DS_Store
 

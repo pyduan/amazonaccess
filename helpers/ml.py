@@ -174,33 +174,32 @@ class StackedClassifier(object):
 
     def _find_best_subset(self, y, predictions_list):
         """Finds the combination of models that produce the best AUC."""
-        def compute_subset_auc(indices, set, y):
-            subset = set[list(indices)]
-            mean_preds = sp.mean(subset, axis=0)
-            mean_auc = compute_auc(y, mean_preds)
-            return mean_auc, indices
-
         best_subset_indices = range(len(predictions_list))
 
         pool = multiprocessing.Pool(processes=4)
         partial_compute_subset_auc = partial(compute_subset_auc,
-                                             set=predictions_list, y=y)
+                                             pred_set=predictions_list, y=y)
         best_auc = 0
+        best_n = 0
+        best_indices = []
+
+        if len(predictions_list) == 1:
+            return [1]
 
         for n in range(int(len(predictions_list)/2), len(predictions_list)):
             cb = itertools.combinations(range(len(predictions_list)), n)
             combination_results = pool.map(partial_compute_subset_auc, cb)
             best_subset_auc, best_subset_indices = max(
                 combination_results, key=itemgetter(0))
-            print "- auc: %.4f (%d: %s)" % (best_subset_auc, n,
-                                            list(best_subset_indices))
+            print "- max auc (%d models): %.4f > %s" % (
+                n, best_subset_auc, n, list(best_subset_indices))
             if best_subset_auc > best_auc:
                 best_auc = best_subset_auc
                 best_n = n
                 best_indices = list(best_subset_indices)
         pool.terminate()
 
-        logger.info("max auc: %.4f", best_auc)
+        logger.info("best auc: %.4f", best_auc)
         logger.info("best n: %d", best_n)
         logger.info("best indices: %s", best_indices)
         for i, (model, feature_set) in enumerate(self.models):
@@ -226,7 +225,7 @@ class StackedClassifier(object):
             model.fit(X_train, y_train)
             model_preds = model.predict_proba(X_predict)[:, 1]
             with open("cache/models/%s/%s.pkl" % (
-                    self.cache_dir, cache_file, 'w')) as f:
+                    self.cache_dir, cache_file), 'w') as f:
                 pickle.dump((model.get_params(), model_preds), f)
 
         return model_preds
@@ -322,22 +321,31 @@ class StackedClassifier(object):
                     logger.info("> used model %s:\n%s", stringify(
                         model, feature_set), model.get_params())
 
-            if self.model_selection and train is not None:
-                best_subset = self._find_best_subset(y_train, stage0_predict)
-                stage0_train = [pred for i, pred in enumerate(stage0_train)
-                                if i in best_subset]
-                stage0_predict = [pred for i, pred in enumerate(stage0_predict)
-                                  if i in best_subset]
+        if self.model_selection and predict is not None:
+            best_subset = self._find_best_subset(y[predict], stage0_predict)
+            stage0_train = [pred for i, pred in enumerate(stage0_train)
+                            if i in best_subset]
+            stage0_predict = [pred for i, pred in enumerate(stage0_predict)
+                              if i in best_subset]
 
-            mean_preds, stack_preds, fwls_preds = self._combine_preds(
-                np.array(stage0_train).T, np.array(stage0_predict).T,
-                y_train, stack=self.stack, fwls=self.fwls)
+        mean_preds, stack_preds, fwls_preds = self._combine_preds(
+            np.array(stage0_train).T, np.array(stage0_predict).T,
+            y_train, stack=self.stack, fwls=self.fwls)
 
-            if self.stack:
-                selected_preds = stack_preds if not self.fwls else fwls_preds
-            else:
-                selected_preds = mean_preds
+        if self.stack:
+            selected_preds = stack_preds if not self.fwls else fwls_preds
+        else:
+            selected_preds = mean_preds
+
         return selected_preds
+
+
+def compute_subset_auc(indices, pred_set, y):
+    subset = [vect for i, vect in enumerate(pred_set) if i in indices]
+    mean_preds = sp.mean(subset, axis=0)
+    mean_auc = compute_auc(y, mean_preds)
+
+    return mean_auc, indices
 
 
 def find_params(model, feature_set, y, subsample=None, grid_search=False):

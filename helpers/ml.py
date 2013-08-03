@@ -1,6 +1,7 @@
-""" ml.py
+"""ml.py
 
-This file contains the ML algorithms themselves:
+This is the file that does the heavy lifting.
+It contains the ML algorithms themselves:
     - AUCRegressor: a custom class that optimizes AUC directly
     - MLR: a linear regression with non-negativity constraints
     - StackedClassifier: a custom class that combines several models

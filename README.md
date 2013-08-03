@@ -27,6 +27,11 @@ Usage:
       -w, --fwls            Use metafeatures.
 
 
+To directly generate predictions on the test set without computing CV
+metrics, simply run:  
+
+    python classifier.py -i0 -f[output_filename]
+
 This script will launch Paul's model, which incorporates some of Benjamin's features.
 Benjamin's model is in the BSMan folder and can be run this way:  
 
@@ -37,7 +42,13 @@ Benjamin's model is in the BSMan folder and can be run this way:
 The output of our models is then combined by simple standardization then weighted averaging, using 2/3 Paul's model and 1/3 Benjamin's.
 
 
-train.csv and test.csv must be in the data/ folder.
+Requirements:
+---------------
+This code requires Python, numpy/scipy, scikit-learn, and pandas for
+some of the external code (this dependency will be removed in the
+future).  
+It has been tested under Mac OS X with Python v.7.x,
+scikit-learn 0.13, numpy 0.17, and pandas 0.11.
 
 License:
 ---------------

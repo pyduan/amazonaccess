@@ -43,10 +43,32 @@ def sparsify(X, X_test):
 
 def create_datasets(X, X_test, y, datasets=[], use_cache=True):
     """
-    Create datasets with different sets of features and save them to disk.
+    Generate datasets as needed with different sets of features
+    and save them to disk.
     The datasets are created by combining a base feature set (combinations of
     the original variables) with extracted feature sets, with some additional
     variants.
+
+    The nomenclature is as follows:
+    Base datasets:
+        - basic: the original columns, minus role1, role2, and role_code
+        - tuples: all order 2 combinations of the original columns
+        - triples: all order 3 combinations of the original columns
+        - greedy[1,2,3]: three different datasets obtained by performing
+            greedy feature selection with different seeds on the triples
+            dataset
+        - effects: experimental. Created to try out a suggestion by Gxav
+            after the competition
+
+    Feature sets and variants:
+    (denoted by the letters after the underscore in the base dataset name):
+        - s: the base dataset has been sparsified using One-Hot encoding
+        - c: the rare features have been consolidated into one category
+        - f: extracted features have been appended, with a different set for
+            linear models than for tree-based models
+        - b: Benjamin's extracted features.
+        - d: interactions for the extracted feature set have been added
+        - l: the extracted features have been log transformed
     """
     if use_cache:
         # Check if all files exist. If not, generate the missing ones

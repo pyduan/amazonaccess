@@ -32,6 +32,15 @@ logger = logging.getLogger(__name__)
 
 
 def main(CONFIG):
+    """
+    The final model is a combination of several base models, which are then
+    combined using StackedClassifier defined in the helpers.ml module.
+
+    The list of models and associated datasets is generated automatically
+    from their identifying strings. The format is as follows:
+    A:b_c where A is the initials of the algorithm to use, b is the base
+    dataset, and c is the feature set and the variants to use.
+    """
     SEED = 42
     selected_models = [
         "LR:tuples_sf",

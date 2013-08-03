@@ -191,7 +191,7 @@ class StackedClassifier(object):
             combination_results = pool.map(partial_compute_subset_auc, cb)
             best_subset_auc, best_subset_indices = max(
                 combination_results, key=itemgetter(0))
-            print "- max auc (%d models): %.4f > %s" % (
+            print "- best subset auc (%d models): %.4f > %s" % (
                 n, best_subset_auc, n, list(best_subset_indices))
             if best_subset_auc > best_auc:
                 best_auc = best_subset_auc

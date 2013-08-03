@@ -3,6 +3,7 @@ Amazon Employee Access Challenge
 
 This code was written by Paul Duan (<email@paulduan.com>) and Benjamin Solecki (<bensolucky@gmail.com>).
 It provides our winning solution to the Amazon Employee Access Challenge.
+Our code is currently not merged. You'll find Benjamin's code in the BSMan/ folder, which needs to be run separately.
 
 
 Usage:

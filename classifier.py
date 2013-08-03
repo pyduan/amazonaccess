@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-"""Amazon Access Challenge code
+"""Amazon Access Challenge
 
+This is my part of the code that produced the winning solution to the
+Amazon Employee Access Challenge. See README.md for more details.
 
 Author: Paul Duan <email@paulduan.com>
 """

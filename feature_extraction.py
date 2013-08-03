@@ -115,6 +115,10 @@ def create_datasets(X, X_test, y, datasets=[], use_cache=True):
         Xt_test = create_tuples(X_test)
         save_dataset("tuples", Xt, Xt_test)
 
+        Xtr = create_tuples(X)
+        Xtr_test = create_tuples(X_test)
+        save_dataset("triples", Xtr, Xtr_test)
+
         Xe, Xe_test = create_effects(X, X_test, y)
         save_dataset("effects", Xe, Xe_test)
 
@@ -143,7 +147,7 @@ def create_datasets(X, X_test, y, datasets=[], use_cache=True):
             save_dataset(ds + '_sbl', Xs, Xs_test, bsfeats_l, bsfeats_l_test)
             save_dataset(ds + '_sbd', Xs, Xs_test, bsfeats_d, bsfeats_d_test)
 
-            if Xg.dtype == 'int64':
+            if issubclass(Xg.dtype.type, np.integer):
                 consolidate(Xg, Xg_test)
                 save_dataset(ds + '_c', Xg, Xg_test)
                 save_dataset(ds + '_cf', Xg, Xg_test, feats, feats_test)

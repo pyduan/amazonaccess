@@ -62,8 +62,8 @@ def main(CONFIG):
 
     # Create the models on the fly
     models = []
-    for items in selected_models:
-        model_id, dataset = items.split(':')
+    for item in selected_models:
+        model_id, dataset = item.split(':')
         model = {'LR': linear_model.LogisticRegression,
                  'GBC': ensemble.GradientBoostingClassifier,
                  'RFC': ensemble.RandomForestClassifier,

@@ -1,6 +1,10 @@
 """combine.py
 
 This is an ad-hoc script we used to find how to merge our submissions.
+For this to work, the prediction vectors must be placed in the internal/
+folder.
+
+Author: Paul Duan <email@paulduan.com>
 """
 
 import numpy as np
@@ -29,12 +33,12 @@ mean_prediction = 0.0
 y = load_data('train.csv')[0]
 y = y[range(len(y) - 7770, len(y))]
 
-files = ["log75", "paul", "enp", "NB55", "NB45"]
+files = ["log75", "ens", "paul"]
 totransform = []
 
 preds = []
 for filename in files:
-    with open("internal/new/final/%s.csv" % filename) as f:
+    with open("internal/%s.csv" % filename) as f:
         pred = np.loadtxt(f, delimiter=',', usecols=[1], skiprows=1)
         if filename in totransform:
             pred = inverse_transform(pred)

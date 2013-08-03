@@ -28,7 +28,7 @@ Usage:
 
 
 This script will launch Paul's model, which incorporates some of Benjamin's features.
-Benjamin's model is in the BSMan folder and can be ran this way:  
+Benjamin's model is in the BSMan folder and can be run this way:  
 
     (in BSMan/)
     [python] logistic.py log 75

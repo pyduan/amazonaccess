@@ -30,9 +30,10 @@ def load_data(filename, return_labels=True):
 def load_from_cache(filename, use_cache=True):
     """Attempt to load data from cache."""
     data = None
+    read_mode = 'rb' if '.pkl' in filename else 'r'
     if use_cache:
         try:
-            with open("cache/%s" % filename) as f:
+            with open("cache/%s" % filename, read_mode) as f:
                 data = pickle.load(f)
         except IOError:
             pass
@@ -63,7 +64,7 @@ def save_dataset(filename, X, X_test, features=None, features_test=None):
             X_test = np. hstack((X_test, features_test))
 
     logger.info("> saving %s to disk", filename)
-    with open("cache/%s.pkl" % filename, 'w') as f:
+    with open("cache/%s.pkl" % filename, 'wb') as f:
         pickle.dump((X, X_test), f, pickle.HIGHEST_PROTOCOL)
 
 
@@ -75,7 +76,7 @@ def get_dataset(feature_set='basic', train=None, cv=None):
     If subsample is omitted, return both the full training and test sets.
     """
     try:
-        with open("cache/%s.pkl" % feature_set) as f:
+        with open("cache/%s.pkl" % feature_set, 'rb') as f:
             if train is not None:
                 X, _ = pickle.load(f)
                 if cv is None:

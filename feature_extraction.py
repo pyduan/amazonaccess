@@ -75,7 +75,7 @@ def create_datasets(X, X_test, y, datasets=[], use_cache=True):
         DATASETS = []
         for dataset in datasets:
             try:
-                with open("cache/%s.pkl" % dataset):
+                with open("cache/%s.pkl" % dataset, 'rb'):
                     pass
             except IOError:
                 logger.warning("couldn't load dataset %s, will generate it",
@@ -416,7 +416,7 @@ def get_pivottable(X_train, X_test, use='all'):
         dictionaries.append({'total': 0})
 
     try:
-        with open("cache/%s.pkl" % filename) as f:
+        with open("cache/%s.pkl" % filename, 'rb') as f:
             logger.debug("loading cross-tabulated data from cache")
             dictionaries = pickle.load(f)
     except IOError:
@@ -435,7 +435,7 @@ def get_pivottable(X_train, X_test, use='all'):
                             dictionaries[j][row[j]][key][row[k]] = 1
                         else:
                             dictionaries[j][row[j]][key][row[k]] += 1
-        with open("cache/%s.pkl" % filename, 'w') as f:
+        with open("cache/%s.pkl" % filename, 'wb') as f:
             pickle.dump(dictionaries, f, pickle.HIGHEST_PROTOCOL)
 
     return dictionaries

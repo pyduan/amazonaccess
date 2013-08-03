@@ -226,7 +226,7 @@ class StackedClassifier(object):
             model.fit(X_train, y_train)
             model_preds = model.predict_proba(X_predict)[:, 1]
             with open("cache/models/%s/%s.pkl" % (
-                    self.cache_dir, cache_file), 'w') as f:
+                    self.cache_dir, cache_file), 'wb') as f:
                 pickle.dump((model.get_params(), model_preds), f)
 
         return model_preds
@@ -254,7 +254,7 @@ class StackedClassifier(object):
             stack_preds = np.array(stack_preds)[sp.argsort(indexes_cv)]
 
             with open("cache/models/%s/cv_preds/%s%d.pkl" % (
-                    self.cache_dir, cache_file), 'w') as f:
+                    self.cache_dir, cache_file), 'wb') as f:
                 pickle.dump(stack_preds, f, pickle.HIGHEST_PROTOCOL)
 
         return stack_preds

@@ -16,8 +16,8 @@ from scipy import sparse
 from sklearn import preprocessing
 
 from external import greedy, ben
-from helpers.data import save_dataset
-from helpers.ml import get_dataset
+from data import save_dataset
+from ml import get_dataset
 
 logger = logging.getLogger(__name__)
 subformatter = logging.Formatter("[%(asctime)s] %(levelname)s\t> %(message)s")

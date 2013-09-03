@@ -16,7 +16,7 @@ import logging
 from sklearn import metrics, cross_validation, linear_model, ensemble
 from helpers import ml, diagnostics
 from helpers.data import load_data, save_results
-from feature_extraction import create_datasets
+from helpers.feature_extraction import create_datasets
 
 logging.basicConfig(format="[%(asctime)s] %(levelname)s\t%(message)s",
                     filename="history.log", filemode='a', level=logging.DEBUG,
